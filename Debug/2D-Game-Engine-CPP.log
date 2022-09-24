@@ -1,0 +1,38 @@
+﻿  Main.cpp
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(29,2): error C2664: 'void CreateGameFont(HFONT *,char [],int,int)': cannot convert argument 2 from 'const char [6]' to 'char []'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(30,22): message : Conversion from string literal loses const qualifier (see /Zc:strictStrings)
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Functions.h(2,6): message : see declaration of 'CreateGameFont'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(105,13): warning C4309: 'argument': truncation of constant value
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(221,53): error C2664: 'HICON LoadIconA(HINSTANCE,LPCSTR)': cannot convert argument 2 from 'LPWSTR' to 'LPCSTR'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(221,38): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(10667,1): message : see declaration of 'LoadIconA'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(222,55): error C2664: 'HICON LoadIconA(HINSTANCE,LPCSTR)': cannot convert argument 2 from 'LPWSTR' to 'LPCSTR'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(222,40): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(10667,1): message : see declaration of 'LoadIconA'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(223,51): error C2664: 'HCURSOR LoadCursorA(HINSTANCE,LPCSTR)': cannot convert argument 2 from 'LPWSTR' to 'LPCSTR'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(223,42): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(10536,1): message : see declaration of 'LoadCursorA'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(227,55): error C2664: 'HICON LoadIconA(HINSTANCE,LPCSTR)': cannot convert argument 2 from 'LPWSTR' to 'LPCSTR'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(227,40): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(10667,1): message : see declaration of 'LoadIconA'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(237,43): error C2440: '=': cannot convert from 'HGDIOBJ' to 'HFONT'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(237,26): message : Conversion from 'void*' to pointer to non-'void' requires an explicit cast
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(286,41): error C2440: '=': cannot convert from 'MMRESULT (__stdcall *)(UINT)' to 'MMRESULT (__cdecl *)(UINT)'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(286,25): message : This conversion requires a reinterpret_cast, a C-style cast or function-style cast
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(287,47): error C2440: '=': cannot convert from '_NtQueryTimerResolution' to 'LONG (__cdecl *)(PULONG,PULONG,PULONG)'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(287,25): message : This conversion requires a reinterpret_cast, a C-style cast or function-style cast
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(332,1): error C2362: initialization of 'MonitorHeight' is skipped by 'goto Exit'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(322): message : see declaration of 'MonitorHeight'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(332): message : see declaration of 'Exit'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(332,1): error C2362: initialization of 'MonitorWidth' is skipped by 'goto Exit'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(321): message : see declaration of 'MonitorWidth'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(332): message : see declaration of 'Exit'
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(484,2): error C4576: a parenthesized type followed by an initializer list is a non-standard explicit type conversion syntax
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(480,23): error C2397: conversion from 'int' to 'char' requires a narrowing conversion
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(480,23): warning C4309: 'initializing': truncation of constant value
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(481,23): error C2397: conversion from 'int' to 'char' requires a narrowing conversion
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(481,23): warning C4309: 'initializing': truncation of constant value
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(482,23): error C2397: conversion from 'int' to 'char' requires a narrowing conversion
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(482,23): warning C4309: 'initializing': truncation of constant value
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(483,23): error C2397: conversion from 'int' to 'char' requires a narrowing conversion
+C:\Users\ShreksLove\source\repos\2D-Game-Engine-CPP\Main.cpp(483,23): warning C4309: 'initializing': truncation of constant value
