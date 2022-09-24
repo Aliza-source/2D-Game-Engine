@@ -1,7 +1,7 @@
 #pragma once
 #define GAME_NAME						L"Game_Name"
 #define GAME_WIDTH						384
-#define GAME_HEIGHT						240
+#define GAME_HEIGHT						240 
 #define GAME_COLOR_DEPTH				32
 #define GAME_PIXEL_COUNT				GAME_WIDTH * GAME_HEIGHT
 #define GAME_BACKBUFFER_SIZE			(GAME_PIXEL_COUNT * (GAME_COLOR_DEPTH / 8))

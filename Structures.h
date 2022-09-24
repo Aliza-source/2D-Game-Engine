@@ -1,3 +1,8 @@
+typedef struct GAMEBITMAP {
+	BITMAPINFO Bitmap;
+	void* Memory;
+} GAMEBITMAP;
+
 typedef struct PLAYER_SIZE {
 	int Width;
 	int Height;
@@ -15,18 +20,21 @@ typedef struct PLAYER_STATS {
 	int MagicPoints;
 } PLAYER_STATS;
 
+typedef struct PLAYER_SPRITES {
+	GAMEBITMAP GameStart[12];
+	GAMEBITMAP GameHalfway[12];
+	GAMEBITMAP GameEnd[12];
+} PLAYER_SPRITES;
+
 typedef struct PLAYER {
-	char Name[12];
+	wchar_t Name[12];
 	PLAYER_POSITION ScreenPosition;
 	PLAYER_POSITION WorldPosition;
 	PLAYER_SIZE Size;
 	PLAYER_STATS Stats;
+	PLAYER_SPRITES Sprites;
 } PLAYER;
 
-typedef struct GAMEBITMAP {
-	BITMAPINFO Bitmap;
-	void* Memory;
-} GAMEBITMAP;
 
 typedef struct PIXEL32 {
 	BYTE Blue;

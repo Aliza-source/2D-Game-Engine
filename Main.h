@@ -7,6 +7,7 @@
 #define SIMD
 
 #include "Settings.h"
+#include "Player.h"
 #include "SystemErrors.h"
 #include "Structures.h"
 #include "Functions.h"
