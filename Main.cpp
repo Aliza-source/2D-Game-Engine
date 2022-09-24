@@ -87,7 +87,9 @@ int WINAPI WinMain(_In_ HINSTANCE WindowInstance, _In_opt_ HINSTANCE PreviousIns
 		(LARGE_INTEGER*)&gStatistics.Debug.PerformanceFrequency
 	);
 
-	InitializeGame();
+	if (!InitializeGame()) {
+		goto Exit;
+	}
 
 	gGameIsRunning = TRUE;
 
@@ -96,8 +98,11 @@ int WINAPI WinMain(_In_ HINSTANCE WindowInstance, _In_opt_ HINSTANCE PreviousIns
 			DispatchMessageW(&WindowMessage);
 		}
 		QueryPerformanceCounter((LARGE_INTEGER*)&Frame.Start);
+
 		ProcessPlayerInput();
+
 		RenderFrameGraphics();
+
 		QueryPerformanceCounter((LARGE_INTEGER*)&Frame.End);
 
 		Frame.ElapsedMicroseconds =	 SECONDS_TO_MICROSECONDS(Frame.End - Frame.Start) / gStatistics.Debug.PerformanceFrequency;
@@ -161,22 +166,11 @@ int WINAPI WinMain(_In_ HINSTANCE WindowInstance, _In_opt_ HINSTANCE PreviousIns
 			Frame.DeltaTimeUnscaled = 0;
 		}
 	}
-Exit: {
-	return 0;
+	Exit: {
+		return 0;
 	}
 }
 
-BOOL SetGameToHighPriority(HANDLE ProcessHandle, HANDLE ThreadHandle) {
-	if (SetPriorityClass(ProcessHandle, HIGH_PRIORITY_CLASS) == 0) {
-		MessageBoxW(NULL, L"Failed to set the process priority!", L"Error!", MB_ICONEXCLAMATION | MB_OK);
-		return FALSE;
-	}
-	if (SetThreadPriority(ThreadHandle, THREAD_PRIORITY_HIGHEST) == 0) {
-		MessageBoxW(NULL, L"Failed to set the thread priority!", L"Error!", MB_ICONEXCLAMATION | MB_OK);
-		return FALSE;
-	}
-	return TRUE;
-}
 
 LRESULT CALLBACK MainWindowProc(_In_ HWND WindowHandle, _In_ unsigned int WindowMessage, _In_ WPARAM WindowParameterWide, _In_ LPARAM WindowParameter) {
 	LRESULT Result = 0;
@@ -230,12 +224,31 @@ WNDCLASSEXW CreateWindowClass(void) {
 	return WindowClass;
 }
 
-void DisplayLastError(void) {
+void DisplayLastError(const wchar_t* Message) {
 	int ErrorCode = (int)GetLastError();
 	wchar_t ErrorHeader[10];
 	swprintf_s(ErrorHeader, 10, L"Error %i", ErrorCode);
-	MessageBoxW(NULL, SystemErrors[ErrorCode], ErrorHeader, MB_ICONEXCLAMATION | MB_OK);
+	wchar_t ErrorMessage[256];
+	swprintf_s(ErrorHeader, 256, L"%s\n /s", Message, SystemErrors[ErrorCode]);
+	MessageBoxW(NULL, ErrorMessage, ErrorHeader, MB_ICONEXCLAMATION | MB_OK);
 }
+
+BOOL SetGameToHighPriority(HANDLE ProcessHandle, HANDLE ThreadHandle) {
+	if (SetPriorityClass(ProcessHandle, HIGH_PRIORITY_CLASS) == 0) {
+		MessageBoxW(NULL, L"Failed to set the process priority!", L"Error!", MB_ICONEXCLAMATION | MB_OK);
+		return FALSE;
+	}
+	if (SetThreadPriority(ThreadHandle, THREAD_PRIORITY_HIGHEST) == 0) {
+		MessageBoxW(NULL, L"Failed to set the thread priority!", L"Error!", MB_ICONEXCLAMATION | MB_OK);
+		return FALSE;
+	}
+	return TRUE;
+}
+
+BOOL Load32BitmapFromFile(_In_ const char* Filename, _Inout_ GAMEBITMAP* Bitmap) {
+	return TRUE;
+}
+
 
 BOOL CreateGameWindow(void) {
 
@@ -317,25 +330,39 @@ BOOL SetWindowToFullscreen(HWND WindowHandle) {
 	return TRUE;
 }
 
-void InitializeGame(void) {
+BOOL InitializeGame(void) {
 	ClearColor(128, 50, 0);
-	InitializeGameMap();
-	InitializePlayer(&gPlayer);
+
+	if (!InitializeGameMap()) {
+		DisplayLastError();
+		return FALSE;
+	}
+	if (!InitializePlayer(&gPlayer)) {
+		DisplayLastError();
+		return FALSE;
+	}
+	return TRUE;
 }
 
-void InitializeGameMap(void) {
+BOOL InitializeGameMap(void) {
 	gMap.Bounds.Bottom = 0;
 	gMap.Bounds.Top = GAME_HEIGHT;
 	gMap.Bounds.Left = 0;
 	gMap.Bounds.Right = GAME_WIDTH;
+	return TRUE;
 }
 
-void InitializePlayer(PLAYER* player) {
+BOOL InitializePlayer(PLAYER* player) {
 	player->Stats.MovementSpeed = 120.0f;
 	player->ScreenPosition.X = 25;
 	player->ScreenPosition.Y = 25;
 	player->Size.Width = 35;
 	player->Size.Height = 35;
+	Load32BitmapFromFile(
+		"..\\..\\Assets\\Hero_Suit0_Down_Standing.bmpx",
+		&player->Sprites.GameStart[FACING_DOWN_0]
+	);
+	return TRUE;
 }
 
 void ProcessPlayerInput(void) {
