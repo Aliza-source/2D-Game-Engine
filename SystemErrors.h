@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 std::unordered_map<int, const wchar_t*> SystemErrors = {
+    { 0,    L"Default system error." },
     { 1300, L"[Error 1300]: Not all privileges or groups referenced are assigned to the caller." },
     { 1301, L"[Error 1301]: Some mapping between account names and security IDs was not done." },
     { 1302, L"[Error 1302]: No system quota limits are specifically set for this account." },

@@ -1,4 +1,6 @@
 #pragma once
+#define CONCAT_STRINGS(stringA, strinB) (StringA stringB);
+#define GAME_ROOT_FOLDER				"..\\..\\"
 #define GAME_NAME						L"Game_Name"
 #define GAME_WIDTH						384
 #define GAME_HEIGHT						240 

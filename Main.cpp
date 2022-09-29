@@ -28,7 +28,7 @@ int WINAPI WinMain(_In_ HINSTANCE WindowInstance, _In_opt_ HINSTANCE PreviousIns
 	gStatistics.Debug.DisplayInfo = TRUE;
 	CreateGameFont(&gGameFonts.Debug, (wchar_t*)(GAME_DEBUG_FONT_NAME), GAME_DEBUG_FONT_SIZE);
 
-	SystemTimer Timer;
+	SystemTimer Timer = { 0 };
 	MSG WindowMessage = { 0 };
 
 	const HANDLE ProcessHandle = GetCurrentProcess();
@@ -224,13 +224,17 @@ WNDCLASSEXW CreateWindowClass(void) {
 	return WindowClass;
 }
 
-void DisplayLastError(const wchar_t* Message) {
+void DisplayLastErrorW(const wchar_t* Message) {
 	int ErrorCode = (int)GetLastError();
 	wchar_t ErrorHeader[10];
 	swprintf_s(ErrorHeader, 10, L"Error %i", ErrorCode);
 	wchar_t ErrorMessage[256];
-	swprintf_s(ErrorHeader, 256, L"%s\n /s", Message, SystemErrors[ErrorCode]);
+	_snwprintf_s(ErrorMessage, 256, 256, L"%s\n%s", Message, SystemErrors[ErrorCode]);
 	MessageBoxW(NULL, ErrorMessage, ErrorHeader, MB_ICONEXCLAMATION | MB_OK);
+}
+
+void DisplayErrorW(const wchar_t* Message) {
+	MessageBoxW(NULL, Message, L"Error", MB_ICONEXCLAMATION | MB_OK);
 }
 
 BOOL SetGameToHighPriority(HANDLE ProcessHandle, HANDLE ThreadHandle) {
@@ -245,7 +249,30 @@ BOOL SetGameToHighPriority(HANDLE ProcessHandle, HANDLE ThreadHandle) {
 	return TRUE;
 }
 
-BOOL Load32BitmapFromFile(_In_ const char* Filename, _Inout_ GAMEBITMAP* Bitmap) {
+BOOL Load32BitmapFromFile(_In_ const wchar_t* Filename, _Inout_ GAMEBITMAP* Bitmap) {
+	HANDLE BitmapHandle =	 CreateFileW(Filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	WORD BitmapHeader =		 0;
+	DWORD PixelDataOffset =	 0;
+	DWORD nBytesToRead =	 2;
+
+
+	if (BitmapHandle == INVALID_HANDLE_VALUE) {
+		DisplayLastErrorW(L"Failed to create handle to bitmap");
+		return FALSE;
+	}
+	
+	if (ReadFile(BitmapHandle, &BitmapHeader, nBytesToRead, NULL, NULL) == 0) {
+		DisplayLastErrorW(L"Failed to read bitmap header");
+		return FALSE;
+	}
+
+	if (BitmapHeader != 0x4d42) {
+		DisplayErrorW(L"Invalid bitmap header");
+		return FALSE;
+	}
+
+	CloseHandle(BitmapHandle);
+	
 	return TRUE;
 }
 
@@ -255,7 +282,7 @@ BOOL CreateGameWindow(void) {
 	WNDCLASSEXW WindowClass = CreateWindowClass();
 
 	if (RegisterClassExW(&WindowClass) == 0) {
-		DisplayLastError();
+		DisplayLastErrorW(L"Failed to register window class");
 		return FALSE;
 	}
 
@@ -269,7 +296,7 @@ BOOL CreateGameWindow(void) {
 	);
 
 	if (gWindowHandle == NULL) {
-		DisplayLastError();
+		DisplayLastErrorW(L"Failed to create window handle");
 		return FALSE;
 	}
 
@@ -323,10 +350,9 @@ BOOL SetWindowToFullscreen(HWND WindowHandle) {
 		MessageBoxW(NULL, L"Unable to set window position or size", L"Error", MB_ICONEXCLAMATION | MB_OK);
 		return FALSE;
 	}
-
 	gStatistics.Window.Width = MonitorWidth;
 	gStatistics.Window.Height = MonitorHeight;
-
+	 
 	return TRUE;
 }
 
@@ -334,13 +360,15 @@ BOOL InitializeGame(void) {
 	ClearColor(128, 50, 0);
 
 	if (!InitializeGameMap()) {
-		DisplayLastError();
+		DisplayErrorW(L"Unable to initialize game map");
 		return FALSE;
 	}
-	if (!InitializePlayer(&gPlayer)) {
-		DisplayLastError();
+
+	if (!InitializePlayer(&gPlayer)) { 
+		DisplayLastErrorW(L"Load32BitmapFromFile Failed");
 		return FALSE;
 	}
+
 	return TRUE;
 }
 
@@ -353,15 +381,17 @@ BOOL InitializeGameMap(void) {
 }
 
 BOOL InitializePlayer(PLAYER* player) {
-	player->Stats.MovementSpeed = 120.0f;
-	player->ScreenPosition.X = 25;
-	player->ScreenPosition.Y = 25;
-	player->Size.Width = 35;
-	player->Size.Height = 35;
-	Load32BitmapFromFile(
-		"..\\..\\Assets\\Hero_Suit0_Down_Standing.bmpx",
-		&player->Sprites.GameStart[FACING_DOWN_0]
-	);
+	
+	player->Stats.MovementSpeed =	120.0f;
+	player->ScreenPosition.X =		25;
+	player->ScreenPosition.Y =		25;
+	player->Size.Width =			35;
+	player->Size.Height =			35;
+
+	if (!Load32BitmapFromFile(L"C:\\c++ projects\\2D-Game-Engine\\Assets\\" L"Hero_Suit0_Down_Standing.bmpx", &player->Sprites.GameStart[FACING_DOWN_0])) {
+		return FALSE;
+	}
+
 	return TRUE;
 }
 
@@ -380,7 +410,7 @@ void ProcessPlayerInput(void) {
 	SHORT DownKeyIsDown = GetAsyncKeyState(VK_DOWN) | GetAsyncKeyState('S');
 
 	if (DebugKeyIsDown && !DebugKeyWasDown) {
-		gStatistics.Debug.DisplayInfo = !gStatistics.Debug.DisplayInfo;
+		gStatistics.Debug.DisplayInfo = gStatistics.Debug.DisplayInfo ? FALSE : TRUE;
 	}
 
 	if (EscapeKeyIsDown) {
